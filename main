@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct NOD {
+    char sursa[20];
+    char destinatie[20];
+    int valoare;
+    struct NOD * next;
+};
+
+struct NOD * creare_nod(char sursa[20], char destinatie[20], int valoare){
+    struct NOD * nod_nou = malloc(sizeof(struct NOD));
+    strcpy(nod_nou->sursa, sursa);
+    strcpy(nod_nou->destinatie, destinatie);
+    nod_nou ->valoare = valoare;
+    nod_nou->next = NULL;
+    return nod_nou;
+}
+struct NOD * add(struct NOD * head, char sursa[20] , char destinatie[20], int valoare){
+    if(head == NULL){
+        return creare_nod(sursa, destinatie, valoare);
+    }
+    struct NOD * ptr = head;
+    while(ptr->next != NULL){
+        ptr = ptr->next;
+    }
+    ptr->next = creare_nod(sursa, destinatie, valoare);
+    return head;
+}
+void afisare(struct NOD * head){
+    while(head != NULL){
+        printf("%s %s %d\n", head->sursa, head->destinatie, head->valoare);
+        head = head->next;
+    }
+}
+void find(struct NOD * head, char nume_cerut[15]){
+    while(head != NULL){
+        if(strcmp(head->sursa, nume_cerut) == 0){
+            printf("%s\n", head->destinatie);
+        }
+        head = head->next;
+    }
+}
+
+int main(){
+    int caz, valoare, nr;
+    char sursa[20], destinatie[20];
+    scanf("%d", &nr);
+    struct NOD * head = NULL;
+    for(int i = 0; i < nr; i++){
+        scanf("%s", sursa);
+        scanf("%s", destinatie);
+        scanf("%d", &valoare);
+        head= add(head, sursa, destinatie, valoare); 
+    }
+    scanf("%d", &caz);
+    if(caz ==1 ){
+        afisare(head);
+    }
+    if(caz ==2 ){
+        int suma = 0;
+        while(head != NULL){
+            suma += head->valoare;
+            head = head->next;
+        }
+      printf("%d", suma);
+    }
+    if(caz == 3){
+        char nume_cautat[20];
+        scanf("%s", nume_cautat);
+        find(head, nume_cautat);
+    }
+    if(caz == 4){
+        char nume[20];
+        scanf("%s", nume);
+        struct NOD * ptr = head;
+        while(head != NULL){
+            if(strcmp(nume, head->sursa) == 0){
+                printf("%s %s %d\n", head->sursa, head->destinatie, head->valoare);
+                strcpy(nume, head->destinatie);
+            }
+            head = head->next;
+        }
+        while(ptr != NULL){
+            if(strcmp(nume, ptr->sursa)== 0){
+                printf("%s %s %d\n", ptr->sursa, ptr->destinatie, ptr->valoare);
+                strcpy(nume, ptr->destinatie);
+            }
+            ptr = ptr->next;
+        }
+    }
+    return 0;
+    
+}
